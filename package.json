@@ -1,6 +1,6 @@
 {
   "name": "markdown-it-mark",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "<mark> tag for markdown-it markdown parser.",
   "keywords": [
     "markdown-it-plugin",
