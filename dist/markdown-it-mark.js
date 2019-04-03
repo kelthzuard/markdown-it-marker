@@ -12,7 +12,7 @@ module.exports = function ins_plugin(md) {
 
     if (silent) { return false; }
 
-    if (marker !== 0x3D/* = */) { return false; }
+    if (marker !== 0x21/* = */) { return false; }
 
     scanned = state.scanDelims(state.pos, true);
     len = scanned.length;
@@ -61,7 +61,7 @@ module.exports = function ins_plugin(md) {
     for (i = 0; i < max; i++) {
       startDelim = delimiters[i];
 
-      if (startDelim.marker !== 0x3D/* = */) {
+      if (startDelim.marker !== 0x21/* = */) {
         continue;
       }
 
@@ -72,21 +72,21 @@ module.exports = function ins_plugin(md) {
       endDelim = delimiters[startDelim.end];
 
       token         = state.tokens[startDelim.token];
-      token.type    = 'mark_open';
-      token.tag     = 'mark';
+      token.type    = 'u_open';
+      token.tag     = 'u';
       token.nesting = 1;
-      token.markup  = '==';
+      token.markup  = '!!';
       token.content = '';
 
       token         = state.tokens[endDelim.token];
-      token.type    = 'mark_close';
-      token.tag     = 'mark';
+      token.type    = 'u_close';
+      token.tag     = 'u';
       token.nesting = -1;
-      token.markup  = '==';
+      token.markup  = '!!';
       token.content = '';
 
       if (state.tokens[endDelim.token - 1].type === 'text' &&
-          state.tokens[endDelim.token - 1].content === '=') {
+          state.tokens[endDelim.token - 1].content === '!') {
 
         loneMarkers.push(endDelim.token - 1);
       }
@@ -102,7 +102,7 @@ module.exports = function ins_plugin(md) {
       i = loneMarkers.pop();
       j = i + 1;
 
-      while (j < state.tokens.length && state.tokens[j].type === 'mark_close') {
+      while (j < state.tokens.length && state.tokens[j].type === 'u_close') {
         j++;
       }
 
@@ -116,8 +116,8 @@ module.exports = function ins_plugin(md) {
     }
   }
 
-  md.inline.ruler.before('emphasis', 'mark', tokenize);
-  md.inline.ruler2.before('emphasis', 'mark', postProcess);
+  md.inline.ruler.before('emphasis', 'u', tokenize);
+  md.inline.ruler2.before('emphasis', 'u', postProcess);
 };
 
 },{}]},{},[1])(1)
